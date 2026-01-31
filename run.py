@@ -32,7 +32,7 @@ def call_app_server_data_url(file_path):
         "config": {}
     }
     resp = requests.post(
-        "http://127.0.0.1:8080/v1/content",
+        "http://127.0.0.1:8080/v1/audio",
         data=json.dumps(payload),
         headers={"Content-Type": "application/json"}
     )

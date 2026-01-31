@@ -24,14 +24,63 @@
 <body>
   <button id="recordBtn">Start Recording</button>
   <div id="display"></div>
+  <div style="margin-top:20px;">
+    <textarea id="textInput" placeholder="Type your message..." style="width:60%;height:48px;font-size:16px;resize:vertical;"></textarea>
+    <button id="sendTextBtn">Submit</button>
+  </div>
   <script>
     let mediaRecorder;
     let audioChunks = [];
+
     const recordBtn = document.getElementById('recordBtn');
     const display = document.getElementById('display');
+    const textInput = document.getElementById('textInput');
+    const sendTextBtn = document.getElementById('sendTextBtn');
+    // Unified send function
+    async function sendText() {
+      const text = textInput.value.trim();
+      if (!text) return;
+      appendDisplay('You: ' + text);
+      textInput.value = '';
+      try {
+        const resp = await fetch('http://127.0.0.1:8080/v1/text', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text }),
+          credentials: 'include',
+        });
+        const result = await resp.json();
+        if (result.llm) {
+          appendDisplay('LLM: ' + result.llm);
+        } else {
+          appendDisplay('Error: ' + (result.error || JSON.stringify(result)));
+        }
+      } catch (e) {
+        appendDisplay('Error: ' + e);
+      }
+    }
+
+    sendTextBtn.addEventListener('click', sendText);
+
+    textInput.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') {
+        if (e.shiftKey) {
+          // Insert line break
+          const start = this.selectionStart;
+          const end = this.selectionEnd;
+          this.value = this.value.substring(0, start) + "\n" + this.value.substring(end);
+          this.selectionStart = this.selectionEnd = start + 1;
+          e.preventDefault();
+        } else {
+          // Send
+          e.preventDefault();
+          sendText();
+        }
+      }
+    });
 
     function appendDisplay(text) {
-      display.textContent += text + '\n';
+      display.textContent += text + '\n----------\n';
     }
 
     function arrayBufferToBase64(buffer) {
@@ -75,7 +124,7 @@
           blobToDataURL(audioBlob, async (dataUrl) => {
             appendDisplay('You: [audio sent]');
             try {
-              const resp = await fetch('http://127.0.0.1:8080/v1/content', {
+              const resp = await fetch('http://127.0.0.1:8080/v1/audio', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ file: dataUrl, config: {} }),
