@@ -1,4 +1,10 @@
-# Generate test file for Mac OSX
+# Summary
+
+Quick demo for ASR application with Apple Silicon chip as backend
+
+# Steps
+
+## Generate test file for Mac OSX
 
 ```console
 export VOICE_TEXT="Tell me a very short story for the cats"
@@ -8,7 +14,7 @@ ffmpeg -i test.aiff test.wav
 rm test.aiff
 ```
 
-# Run Servers & Tests
+## Run Servers & Tests
 
 Run following commands from the current folder but the different terminals.
 
@@ -22,7 +28,7 @@ Terminal 2: Run App server
 python app-server.py
 ```
 
-Terminal 3: Run the test
+Terminal 3: (Optional) Run the test
 ```console
 python run.py
 ```
@@ -34,7 +40,7 @@ python -m http.server
 
 Open browser with http://127.0.0.1:8000/web-app.html
 
-# Architecture
+## Architecture
 
 ```markdown
 +--------------------+         +---------------+         +---------+

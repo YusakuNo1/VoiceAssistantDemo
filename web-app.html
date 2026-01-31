@@ -6,18 +6,18 @@
   <style>
     #recordBtn {
       width: 120px;
-      height: 50px;
-      font-size: 18px;
+      height: 40px;
+      font-size: 16px;
     }
     #display {
       width: 90%;
-      min-height: 120px;
+      min-height: 80px;
       border: 1px solid #ccc;
-      margin-top: 20px;
-      padding: 10px;
+      margin-top: 16px;
+      padding: 8px;
       font-family: monospace;
       white-space: pre-wrap;
-      background: #f9f9f9;
+      background: #fafafa;
     }
   </style>
 </head>
@@ -55,7 +55,6 @@
     let stream = null;
     recordBtn.addEventListener('click', async () => {
       if (!isRecording) {
-        // 开始录音
         if (!navigator.mediaDevices) {
           alert('MediaDevices not supported');
           return;
@@ -70,7 +69,6 @@
         recordBtn.textContent = 'Stop Recording';
         isRecording = true;
       } else {
-        // 停止录音并发送
         if (!mediaRecorder) return;
         mediaRecorder.onstop = async () => {
           const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
