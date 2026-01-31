@@ -104,7 +104,7 @@ async def asr_llm(request: Request, session_id: str = Cookie(default=None)):
 	# 保存历史
 	session_histories[session_id] = chat_history
 	
-	print("* * * history: ", session_histories[session_id])
+	# print("* * * history: ", session_histories[session_id])
 
 	resp = JSONResponse({
 		"asr": asr_result,

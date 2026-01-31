@@ -1,13 +1,16 @@
 # Generate test file for Mac OSX
 
 ```console
-say "Tell me a very short story for the cats" -o test.aiff
+export VOICE_TEXT="Tell me a very short story for the cats"
+say $VOICE_TEXT -o test.aiff
 rm test.wav
 ffmpeg -i test.aiff test.wav
 rm test.aiff
 ```
 
-# Run ASR server
+# Run Servers & Tests
+
+Run following commands from the current folder but the different terminals.
 
 Terminal 1: Run ASR server
 ```console
@@ -30,3 +33,12 @@ python -m http.server
 ```
 
 Open browser with http://127.0.0.1:8000/web-app.html
+
+# Architecture
+
+```markdown
++--------------------+         +---------------+         +---------+
+| Web Page           |---(1)-->| app-server.py |---(2)-->| asr.py  |
+| (Microphone Input) |<--(4)---| (App Logics)  |<--(3)---| (ASR)   |
++--------------------+         +---------------+         +---------+
+```
