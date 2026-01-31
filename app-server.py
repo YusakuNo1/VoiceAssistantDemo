@@ -57,7 +57,7 @@ def parse_with_llm(chat_history):
 session_histories = {}
 
 
-@app.post("/app")
+@app.post("/v1/content")
 async def asr_llm(request: Request, session_id: str = Cookie(default=None)):
 	"""
 	Receives JSON: {"file": data_url, "config": {...}}. Calls ASR, then LLM, and maintains chat history.

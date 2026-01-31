@@ -75,7 +75,7 @@
           blobToDataURL(audioBlob, async (dataUrl) => {
             appendDisplay('You: [audio sent]');
             try {
-              const resp = await fetch('http://127.0.0.1:8080/app', {
+              const resp = await fetch('http://127.0.0.1:8080/v1/content', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ file: dataUrl, config: {} }),
