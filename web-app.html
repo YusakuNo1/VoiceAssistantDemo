@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ASR + LLM Web App</title>
+  <style>
+    #recordBtn {
+      width: 120px;
+      height: 50px;
+      font-size: 18px;
+    }
+    #display {
+      width: 90%;
+      min-height: 120px;
+      border: 1px solid #ccc;
+      margin-top: 20px;
+      padding: 10px;
+      font-family: monospace;
+      white-space: pre-wrap;
+      background: #f9f9f9;
+    }
+  </style>
+</head>
+<body>
+  <button id="recordBtn">Start Recording</button>
+  <div id="display"></div>
+  <script>
+    let mediaRecorder;
+    let audioChunks = [];
+    const recordBtn = document.getElementById('recordBtn');
+    const display = document.getElementById('display');
+
+    function appendDisplay(text) {
+      display.textContent += text + '\n';
+    }
+
+    function arrayBufferToBase64(buffer) {
+      let binary = '';
+      const bytes = new Uint8Array(buffer);
+      for (let i = 0; i < bytes.byteLength; i++) {
+        binary += String.fromCharCode(bytes[i]);
+      }
+      return window.btoa(binary);
+    }
+
+    function blobToDataURL(blob, callback) {
+      const reader = new FileReader();
+      reader.onloadend = function() {
+        callback(reader.result);
+      };
+      reader.readAsDataURL(blob);
+    }
+
+    let isRecording = false;
+    let stream = null;
+    recordBtn.addEventListener('click', async () => {
+      if (!isRecording) {
+        // 开始录音
+        if (!navigator.mediaDevices) {
+          alert('MediaDevices not supported');
+          return;
+        }
+        stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        mediaRecorder = new window.MediaRecorder(stream);
+        audioChunks = [];
+        mediaRecorder.ondataavailable = e => {
+          if (e.data.size > 0) audioChunks.push(e.data);
+        };
+        mediaRecorder.start();
+        recordBtn.textContent = 'Stop Recording';
+        isRecording = true;
+      } else {
+        // 停止录音并发送
+        if (!mediaRecorder) return;
+        mediaRecorder.onstop = async () => {
+          const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+          blobToDataURL(audioBlob, async (dataUrl) => {
+            appendDisplay('You: [audio sent]');
+            try {
+              const resp = await fetch('http://127.0.0.1:8080/app', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ file: dataUrl, config: {} }),
+                credentials: 'include',
+              });
+              const result = await resp.json();
+              if (result.asr && result.asr.text) {
+                appendDisplay('You: ' + result.asr.text);
+              }
+              if (result.llm) {
+                appendDisplay('LLM: ' + result.llm);
+              } else if (!result.asr || !result.asr.text) {
+                appendDisplay('Error: ' + (result.error || JSON.stringify(result)));
+              }
+            } catch (e) {
+              appendDisplay('Error: ' + e);
+            }
+          });
+          if (stream) {
+            stream.getTracks().forEach(track => track.stop());
+            stream = null;
+          }
+        };
+        mediaRecorder.stop();
+        recordBtn.textContent = 'Start Recording';
+        isRecording = false;
+      }
+    });
+  </script>
+</body>
+</html>
