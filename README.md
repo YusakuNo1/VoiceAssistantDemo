@@ -7,6 +7,11 @@ Quick demo for ASR application with Apple Silicon chip as backend
 ## Generate test file for Mac OSX
 
 ```console
+# Only the first time
+brew install ffmpeg
+```
+
+```console
 export VOICE_TEXT="Tell me a very short story for the cats"
 say $VOICE_TEXT -o test.aiff
 rm test.wav
@@ -17,6 +22,8 @@ rm test.aiff
 ## Run Servers & Tests
 
 Run following commands from the current folder but the different terminals.
+
+WARNING: as the models downloading takes time, please check your Terminal 1 and Terminal 2 whether the models were downloaded correctly or not.
 
 Terminal 1: Run ASR server
 ```console

@@ -20,9 +20,9 @@ app.add_middleware(
 )
 
 
-# model, tokenizer = mlx_lm.load("mlx-community/Llama-3.2-1B-Instruct-4bit")
+model, tokenizer = mlx_lm.load("mlx-community/Llama-3.2-1B-Instruct-4bit")
 # model, tokenizer = mlx_lm.load("mlx-community/Llama-3.1-Nemotron-8B-UltraLong-1M-Instruct-bf16")
-model, tokenizer = mlx_lm.load("mlx-community/Qwen3-4B-4bit")
+# model, tokenizer = mlx_lm.load("mlx-community/Qwen3-4B-4bit")
 
 
 def call_asr_server(data_url, config=None):
