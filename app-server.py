@@ -63,7 +63,7 @@ def run_llm_chat(user_content, session_id=None, language=None):
 	chat_history = session_histories.get(session_id, [])
 	if not chat_history or chat_history[0].get("role") != "system":
 		if language == "zh":
-			system_msg = "你是一个乐于助人的助手。"
+			system_msg = "You are a helpful assistant."
 		else:
 			system_msg = "You are a helpful assistant."
 		chat_history = [{"role": "system", "content": system_msg}] + chat_history

@@ -40,6 +40,6 @@ def call_app_server_data_url(file_path):
 
 
 if __name__ == "__main__":
-    # 请确保你有一个名为 test.wav 的音频文件
+    # Please make sure you have an audio file named test.wav
     # call_asr_data_url("test.wav")
     call_app_server_data_url("test.wav")

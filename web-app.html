@@ -68,7 +68,7 @@
     const display = document.getElementById('display');
     const textInput = document.getElementById('textInput');
     const sendTextBtn = document.getElementById('sendTextBtn');
-    // 动态拼接 API 地址，适配 localhost 或 127.0.0.1
+    // Dynamically build API base URL for localhost or 127.0.0.1
     const apiBase = `${window.location.protocol}//${window.location.hostname}:8080`;
     // Unified send function
     async function sendText() {
@@ -115,7 +115,7 @@
 
     function appendDisplay(text) {
       display.textContent += text + '\n----------\n';
-      // 自动滚动到聊天记录底部
+      // Auto scroll to bottom of chat history
       display.scrollTop = display.scrollHeight;
     }
 
