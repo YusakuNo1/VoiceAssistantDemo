@@ -11,21 +11,53 @@
     }
     #display {
       width: 90%;
-      min-height: 80px;
+      position: absolute;
+      top: 16px;
+      left: 5%;
+      bottom: 80px;
+      overflow-y: auto;
       border: 1px solid #ccc;
-      margin-top: 16px;
       padding: 8px;
       font-family: monospace;
       white-space: pre-wrap;
       background: #fafafa;
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      position: relative;
+    }
+    #inputBar {
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      width: 100vw;
+      background: #fff;
+      border-top: 1px solid #ccc;
+      display: flex;
+      align-items: center;
+      padding: 12px 16px;
+      z-index: 100;
+    }
+    #inputBar textarea {
+      width: 60%;
+      height: 48px;
+      font-size: 16px;
+      resize: vertical;
+      margin-right: 10px;
+    }
+    #inputBar button {
+      margin-right: 10px;
     }
   </style>
 </head>
 <body>
   <div id="display"></div>
-  <div style="margin-top:20px; display: flex; align-items: center;">
-    <button id="recordBtn" style="margin-right: 10px;">Start Recording</button>
-    <textarea id="textInput" placeholder="Type your message..." style="width:60%;height:48px;font-size:16px;resize:vertical; margin-right: 10px;"></textarea>
+  <div id="inputBar">
+    <button id="recordBtn">Start Recording</button>
+    <textarea id="textInput" placeholder="Type your message..."></textarea>
     <button id="sendTextBtn">Submit</button>
   </div>
   <script>
@@ -83,6 +115,8 @@
 
     function appendDisplay(text) {
       display.textContent += text + '\n----------\n';
+      // 自动滚动到聊天记录底部
+      display.scrollTop = display.scrollHeight;
     }
 
     function arrayBufferToBase64(buffer) {
