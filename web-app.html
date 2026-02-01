@@ -22,10 +22,10 @@
   </style>
 </head>
 <body>
-  <button id="recordBtn">Start Recording</button>
   <div id="display"></div>
-  <div style="margin-top:20px;">
-    <textarea id="textInput" placeholder="Type your message..." style="width:60%;height:48px;font-size:16px;resize:vertical;"></textarea>
+  <div style="margin-top:20px; display: flex; align-items: center;">
+    <button id="recordBtn" style="margin-right: 10px;">Start Recording</button>
+    <textarea id="textInput" placeholder="Type your message..." style="width:60%;height:48px;font-size:16px;resize:vertical; margin-right: 10px;"></textarea>
     <button id="sendTextBtn">Submit</button>
   </div>
   <script>
@@ -36,6 +36,8 @@
     const display = document.getElementById('display');
     const textInput = document.getElementById('textInput');
     const sendTextBtn = document.getElementById('sendTextBtn');
+    // 动态拼接 API 地址，适配 localhost 或 127.0.0.1
+    const apiBase = `${window.location.protocol}//${window.location.hostname}:8080`;
     // Unified send function
     async function sendText() {
       const text = textInput.value.trim();
@@ -43,7 +45,7 @@
       appendDisplay('You: ' + text);
       textInput.value = '';
       try {
-        const resp = await fetch('http://127.0.0.1:8080/v1/text', {
+        const resp = await fetch(`${apiBase}/v1/text`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ text }),
@@ -124,7 +126,7 @@
           blobToDataURL(audioBlob, async (dataUrl) => {
             appendDisplay('You: [audio sent]');
             try {
-              const resp = await fetch('http://127.0.0.1:8080/v1/audio', {
+              const resp = await fetch(`${apiBase}/v1/audio`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ file: dataUrl, config: {} }),
