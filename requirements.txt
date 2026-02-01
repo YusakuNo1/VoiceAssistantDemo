@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+requests
+soundfile
+numpy
+mlx_lm
+mlx
+mlx-whisper

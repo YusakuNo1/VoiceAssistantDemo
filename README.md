@@ -20,15 +20,16 @@ Run following commands from the current folder but the different terminals.
 
 Terminal 1: Run ASR server
 ```console
+pip install -r requirements.txt
 python asr.py
 ```
 
-Terminal 2: Run App server
+Terminal 2 (the same Python environment like Terminal 1): Run App server
 ```console
 python app-server.py
 ```
 
-Terminal 3: (Optional) Run the test
+Terminal 3 (the same Python environment like Terminal 1): (Optional) Run the test
 ```console
 python run.py
 ```
